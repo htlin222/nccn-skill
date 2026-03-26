@@ -1,0 +1,8 @@
+name: "nccn-{{guideline_slug}}"
+description: "NCCN clinical practice guideline navigation for {{guideline_name}}. Use when a clinician needs treatment decisions, staging, workup, or evidence for {{guideline_name}} based on NCCN Guidelines version {{version}}."
+metadata:
+  author: "nccn-skill-generator"
+  version: "{{version}}"
+  source: "NCCN Clinical Practice Guidelines in Oncology"
+  guideline: "{{guideline_name}}"
+license: "See NCCN terms of use"

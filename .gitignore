@@ -1,0 +1,13 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Intermediate pipeline outputs
+output/
+
+# PDF source (large, copyrighted)
+pdf/

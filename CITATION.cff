@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "create-skill-to-treat-cancer: NCCN Guideline PDF to AI Skill Package Converter"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - given-names: Hsieh-Ting
+    family-names: Lin
+    orcid: "https://orcid.org/0000-0002-0848-3823"
+version: "1.0.0"
+date-released: "2026-03-26"
+url: "https://github.com/htlin222/nccn-skill"
+repository-code: "https://github.com/htlin222/nccn-skill"
+license: Apache-2.0
+keywords:
+  - nccn
+  - clinical-guidelines
+  - cancer
+  - ai-skill
+  - vercel-skills-protocol
+  - progressive-disclosure
+  - clinical-decision-support
+abstract: >-
+  A meta-skill that converts NCCN Clinical Practice Guideline PDFs into
+  structured AI skill packages following the Vercel Skills protocol. The
+  pipeline extracts the PDF table of contents, chunks content by disease
+  and section, dispatches parallel Haiku agents for conversion with
+  mandatory page citations, merges multi-part outputs, and validates
+  the result for link integrity, citation coverage, and format compliance.
