@@ -2,6 +2,8 @@
 
 A meta-skill that converts NCCN Clinical Practice Guideline PDFs into structured AI skill packages following the [Vercel Skills protocol](https://github.com/vercel-labs/skills).
 
+**English** | [繁體中文](README.zh-TW.md)
+
 ## Disclaimer
 
 > **This project is for research and testing purposes only.**
