@@ -94,7 +94,7 @@ def fuzzy_match(a: str, b: str) -> float:
 
 def find_manuscript_boundary(toc_raw: list[tuple[int, str, int]]) -> int | None:
     for i, (level, title, page) in enumerate(toc_raw):
-        if level == 1 and (page == -1 or page < 1) and is_embedded_pdf_bookmark(title):
+        if level == 1 and is_embedded_pdf_bookmark(title):
             return i
     return None
 
