@@ -5,6 +5,7 @@ type: software
 authors:
   - given-names: Hsieh-Ting
     family-names: Lin
+    email: "hsieh.ting.lin@gmail.com"
     orcid: "https://orcid.org/0000-0002-0848-3823"
 version: "1.0.0"
 date-released: "2026-03-26"
