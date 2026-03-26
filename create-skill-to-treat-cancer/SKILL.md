@@ -21,13 +21,15 @@ package with progressive disclosure: disease subtype → stage → treatment lin
 
 - Python 3.10+ with PyMuPDF: `uv pip install pymupdf`
 - Claude Code with Agent tool access (for Haiku dispatch)
-- The source NCCN guideline PDF
+- A valid NCCN account and cookie for PDF download (or bring your own PDF)
+- `fzf` for interactive guideline selection (optional): `brew install fzf`
 
 ## Workflow Checklist
 
 Copy and track progress:
 
 ```
+- [ ] Step 0: Download NCCN guideline PDF
 - [ ] Step 1: Extract PDF structure
 - [ ] Step 2: Chunk PDF by disease/section
 - [ ] Step 3: Convert chunks via parallel Haiku agents
@@ -37,6 +39,38 @@ Copy and track progress:
 ```
 
 ---
+
+## Step 0: Download NCCN Guideline PDF
+
+Download the source PDF using the built-in downloader:
+
+```bash
+# Interactive mode (fzf picker from 87 available guidelines)
+bash scripts/download_nccn.sh
+
+# Direct download by identifier
+bash scripts/download_nccn.sh b-cell
+bash scripts/download_nccn.sh nscl
+bash scripts/download_nccn.sh breast
+
+# Batch download from a list file
+bash scripts/download_nccn.sh --batch nccnlist.txt
+
+# List all available identifiers
+bash scripts/download_nccn.sh --list
+```
+
+**Cookie setup** (required for NCCN authentication):
+1. Log in to [nccn.org](https://www.nccn.org) with a valid professional account
+2. Use a browser extension (e.g., [cookie-cook](https://github.com/gaoliang/cookie-cook))
+   to export your session cookie as an HTTP Header value
+3. Save it to `cookie.txt` in your working directory
+
+The cookie file is gitignored and never committed.
+
+Output: `NCCN-<identifier>-<date>.pdf` in the current directory.
+
+See `assets/nccn_dict.txt` for the full list of 87 guideline identifiers.
 
 ## Step 1: Extract PDF Structure
 

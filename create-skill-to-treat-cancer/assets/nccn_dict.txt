@@ -1,0 +1,86 @@
+ all                   # Acute Lymphoblastic Leukemia
+ aml                   # Acute Myeloid Leukemia
+ ampullary             # Ampullary Adenocarcinoma
+ anal                  # Anal Carcinoma
+ nmsc                  # Basal Cell Skin Cancer
+ b-cell                # B-Cell Lymphomas
+ btc                   # Biliary Tract Cancers
+ bladder               # Bladder Cancer
+ bone                  # Bone Cancer
+ breast                # Breast Cancer
+ cns                   # Central Nervous System Cancers
+ cervical              # Cervical Cancer
+ cll                   # Chronic Lymphocytic Leukemia/Small Lymphocytic Lymphoma
+ cml                   # Chronic Myeloid Leukemia
+ colon                 # Colon Cancer
+ dfsp                  # Dermatofibrosarcoma Protuberans
+ esophageal            # Esophageal and Esophagogastric Junction Cancers
+ gastric               # Gastric Cancer
+ gist                  # Gastrointestinal Stromal Tumors
+ gtn                   # Gestational Trophoblastic Neoplasia
+ hairy_cell            # Hairy Cell Leukemia
+ head-and-neck         # Head and Neck Cancers
+ hepatobiliary         # Hepatobiliary Cancers
+ hcc                   # Hepatocellular Carcinoma
+ histiocytic_neoplasms # Histiocytic Neoplasms
+ hodgkins              # Hodgkin Lymphoma
+ kaposi                # Kaposi Sarcoma
+ kidney                # Kidney Cancer
+ cutaneous_melanoma    # Melanoma: Cutaneous
+ uveal                 # Melanoma: Uveal
+ mcc                   # Merkel Cell Carcinoma
+ meso_peritoneal       # Mesothelioma: Peritoneal
+ meso_pleural          # Mesothelioma: Pleural
+ Myeloma               # Multiple Myeloma
+ mds                   # Myelodysplastic Syndromes
+ mlne                  # Myeloid/Lymphoid Neoplasms with Eosinophilia and Tyrosine Kinase Gene Fusions
+ mpn                   # Myeloproliferative Neoplasms
+ neuroendocrine        # Neuroendocrine and Adrenal Tumors
+ nscl                  # Non-Small Cell Lung Cancer
+ occult                # Occult Primary
+ ovarian               # Ovarian Cancer/Fallopian Tube Cancer/Primary Peritoneal Cancer
+ pancreatic            # Pancreatic Adenocarcinoma
+ ped_all               # Pediatric Acute Lymphoblastic Leukemia
+ ped_b-cell            # Pediatric Aggressive Mature B-Cell Lymphomas
+ ped_cns               # Pediatric Central Nervous System Cancers
+ ped_hodgkin           # Pediatric Hodgkin Lymphoma
+ penile                # Penile Cancer
+ primary_cutaneous     # Primary Cutaneous Lymphomas
+ prostate              # Prostate Cancer
+ rectal                # Rectal Cancer
+ small_bowel           # Small Bowel Adenocarcinoma
+ sclc                  # Small Cell Lung Cancer
+ sarcoma               # Soft Tissue Sarcoma
+ squamous              # Squamous Cell Skin Cancer
+ amyloidosis           # Systemic Light Chain Amyloidosis
+ mastocytosis          # Systemic Mastocytosis
+ t-cell                # T-Cell Lymphomas
+ testicular            # Testicular Cancer
+ thymic                # Thymomas and Thymic Carcinomas
+ thyroid               # Thyroid Carcinoma
+ uterine               # Uterine Neoplasms
+ vulvar                # Vulvar Cancer
+ waldenstroms          # Waldenström Macroglobulinemia / Lymphoplasmacytic Lymphoma
+ wilms_tumor           # Wilms Tumor (Nephroblastoma)
+ antiemesis            # Antiemesis
+ pain                  # Adult Cancer Pain
+ vte                   # Cancer-Associated Venous Thromboembolic Disease
+ fatigue               # Cancer-Related Fatigue
+ distress              # Distress Management
+ hct                   # Hematopoietic Cell Transplantation
+ growthfactors         # Hematopoietic Growth Factors
+ immunotherapy         # Management of Immunotherapy-Related Toxicities
+ palliative            # Palliative Care
+ infections            # Prevention and Treatment of Cancer-Related Infections
+ smoking               # Smoking Cessation
+ survivorship          # Survivorship
+ aya                   # Adolescent and Young Adult (AYA) Oncology
+ older_adult           # Cancer in People with HIV
+ hiv                   # Older Adult Oncology
+ breast_risk           # Breast Cancer Risk Reduction
+ breast-screening      # Breast Cancer Screening and Diagnosis
+ colorectal_screening  # Colorectal Cancer Screening
+ genetics_bop          # Genetic/Familial High-Risk Assessment: Breast, Ovarian, and Pancreatic
+ genetics_colon        # Genetic/Familial High-Risk Assessment: Colorectal
+ lung_screening        # Lung Cancer Screening
+ prostate_detection    # Prostate Cancer Early Detection
