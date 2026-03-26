@@ -19,8 +19,21 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 DICT_FILE="${SCRIPT_DIR}/../assets/nccn_dict.txt"
-COOKIE_FILE="${COOKIE_FILE:-cookie.txt}"
+
+# Cookie search order: env var > ./cookie.txt > <repo>/cookie.txt > <repo>/pdf/cookie.txt
+if [ -n "${COOKIE_FILE:-}" ]; then
+    :
+elif [ -f "cookie.txt" ]; then
+    COOKIE_FILE="cookie.txt"
+elif [ -f "${REPO_ROOT}/cookie.txt" ]; then
+    COOKIE_FILE="${REPO_ROOT}/cookie.txt"
+elif [ -f "${REPO_ROOT}/pdf/cookie.txt" ]; then
+    COOKIE_FILE="${REPO_ROOT}/pdf/cookie.txt"
+else
+    COOKIE_FILE="cookie.txt"
+fi
 OUTPUT_DIR="${OUTPUT_DIR:-.}"
 TODAY=$(date +"%Y-%m-%d")
 NCCN_BASE_URL="https://www.nccn.org/professionals/physician_gls/pdf"

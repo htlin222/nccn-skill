@@ -11,3 +11,6 @@ output/
 
 # PDF source (large, copyrighted)
 pdf/
+
+# NCCN auth cookie (sensitive)
+cookie.txt
