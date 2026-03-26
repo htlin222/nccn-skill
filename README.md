@@ -46,9 +46,12 @@ create-skill-to-treat-cancer/     # The meta-skill (cancer-agnostic)
 ├── references/                   # Conversion prompts, dispatch protocol, docs
 └── assets/                       # Templates and example category files
 
-nccn-b-cell-lymphomas/            # Generated skill package (example output)
-├── SKILL.md                      # Navigation hub with progressive disclosure
-└── references/                   # 34 disease-specific markdown files
+nccn-cancer-skill/                # Generated skill packages (committed)
+├── b-cell-lymphomas/             # 34 reference files, 8,592 lines, 3,479 citations
+└── breast-cancer/                # 24 reference files, 4,008 lines, 1,866 citations
+
+tmp/                              # Intermediate pipeline artifacts (gitignored)
+└── <cancer-name>/                # toc.json, chunks/, converted/, merged/
 ```
 
 ## Quick Start
@@ -59,22 +62,27 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install pymupdf pyyaml
 
 # Step 1-2: Extract and chunk
-python create-skill-to-treat-cancer/scripts/extract_toc.py path/to/nccn.pdf --output toc.json
-python create-skill-to-treat-cancer/scripts/chunk_pdf.py path/to/nccn.pdf --toc toc.json --max-chars 50000
+CANCER=breast-cancer  # change to your cancer type
+mkdir -p tmp/${CANCER}
+
+python create-skill-to-treat-cancer/scripts/extract_toc.py path/to/nccn.pdf --output tmp/${CANCER}/toc.json
+python create-skill-to-treat-cancer/scripts/chunk_pdf.py path/to/nccn.pdf \
+  --toc tmp/${CANCER}/toc.json --output-dir tmp/${CANCER}/chunks --max-chars 50000
 
 # Step 3: Convert chunks via Haiku (see references/haiku-dispatch-protocol.md)
 # Step 4: Merge and assemble
-python create-skill-to-treat-cancer/scripts/merge_parts.py --input-dir converted/ --output-dir merged/
+python create-skill-to-treat-cancer/scripts/merge_parts.py \
+  --input-dir tmp/${CANCER}/converted --output-dir tmp/${CANCER}/merged
 python create-skill-to-treat-cancer/scripts/assemble_skill.py \
-  --chunks-dir merged/ --toc toc.json \
-  --output-dir nccn-<guideline>/ \
+  --chunks-dir tmp/${CANCER}/merged --toc tmp/${CANCER}/toc.json \
+  --output-dir nccn-cancer-skill/${CANCER} \
   --template create-skill-to-treat-cancer/assets/skill-md-template.yaml \
   --guideline-name "<Guideline Name>" --version "<version>"
 
 # Step 5: Validate
-python create-skill-to-treat-cancer/scripts/validate_links.py nccn-<guideline>/
-python create-skill-to-treat-cancer/scripts/validate_citations.py nccn-<guideline>/
-python create-skill-to-treat-cancer/scripts/check_format.py nccn-<guideline>/
+python create-skill-to-treat-cancer/scripts/validate_links.py nccn-cancer-skill/${CANCER}/
+python create-skill-to-treat-cancer/scripts/validate_citations.py nccn-cancer-skill/${CANCER}/
+python create-skill-to-treat-cancer/scripts/check_format.py nccn-cancer-skill/${CANCER}/
 ```
 
 ## Anti-Hallucination Design

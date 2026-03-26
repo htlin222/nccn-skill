@@ -46,9 +46,12 @@ create-skill-to-treat-cancer/     # 元技能（不限癌種）
 ├── references/                   # 轉換提示詞、分派協定、文件
 └── assets/                       # 範本與範例分類檔
 
-nccn-b-cell-lymphomas/            # 生成的技能套件（範例輸出）
-├── SKILL.md                      # 導覽入口，具漸進式揭露
-└── references/                   # 34 個疾病特定 Markdown 檔案
+nccn-cancer-skill/                # 生成的技能套件（已提交）
+├── b-cell-lymphomas/             # 34 個參考檔、8,592 行、3,479 引用
+└── breast-cancer/                # 24 個參考檔、4,008 行、1,866 引用
+
+tmp/                              # 中間產物（已 gitignore）
+└── <cancer-name>/                # toc.json、chunks/、converted/、merged/
 ```
 
 ## 快速開始
@@ -59,22 +62,27 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install pymupdf pyyaml
 
 # 步驟 1-2：擷取目錄與分段
-python create-skill-to-treat-cancer/scripts/extract_toc.py path/to/nccn.pdf --output toc.json
-python create-skill-to-treat-cancer/scripts/chunk_pdf.py path/to/nccn.pdf --toc toc.json --max-chars 50000
+CANCER=breast-cancer  # 修改為你的癌種
+mkdir -p tmp/${CANCER}
+
+python create-skill-to-treat-cancer/scripts/extract_toc.py path/to/nccn.pdf --output tmp/${CANCER}/toc.json
+python create-skill-to-treat-cancer/scripts/chunk_pdf.py path/to/nccn.pdf \
+  --toc tmp/${CANCER}/toc.json --output-dir tmp/${CANCER}/chunks --max-chars 50000
 
 # 步驟 3：透過 Haiku 平行轉換（詳見 references/haiku-dispatch-protocol.md）
 # 步驟 4：合併與組裝
-python create-skill-to-treat-cancer/scripts/merge_parts.py --input-dir converted/ --output-dir merged/
+python create-skill-to-treat-cancer/scripts/merge_parts.py \
+  --input-dir tmp/${CANCER}/converted --output-dir tmp/${CANCER}/merged
 python create-skill-to-treat-cancer/scripts/assemble_skill.py \
-  --chunks-dir merged/ --toc toc.json \
-  --output-dir nccn-<guideline>/ \
+  --chunks-dir tmp/${CANCER}/merged --toc tmp/${CANCER}/toc.json \
+  --output-dir nccn-cancer-skill/${CANCER} \
   --template create-skill-to-treat-cancer/assets/skill-md-template.yaml \
   --guideline-name "<指引名稱>" --version "<版本>"
 
 # 步驟 5：驗證
-python create-skill-to-treat-cancer/scripts/validate_links.py nccn-<guideline>/
-python create-skill-to-treat-cancer/scripts/validate_citations.py nccn-<guideline>/
-python create-skill-to-treat-cancer/scripts/check_format.py nccn-<guideline>/
+python create-skill-to-treat-cancer/scripts/validate_links.py nccn-cancer-skill/${CANCER}/
+python create-skill-to-treat-cancer/scripts/validate_citations.py nccn-cancer-skill/${CANCER}/
+python create-skill-to-treat-cancer/scripts/check_format.py nccn-cancer-skill/${CANCER}/
 ```
 
 ## 防幻覺設計

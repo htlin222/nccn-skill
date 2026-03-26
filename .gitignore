@@ -6,12 +6,11 @@ __pycache__/
 # macOS
 .DS_Store
 
-# Intermediate pipeline outputs
-output/
+# Intermediate pipeline outputs (tmp/<cancer-name>/)
+tmp/
 
 # PDF source (large, copyrighted)
 pdf/
 
 # NCCN auth cookie (sensitive)
 cookie.txt
-output-breast/

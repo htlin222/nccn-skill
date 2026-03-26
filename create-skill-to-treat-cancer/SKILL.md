@@ -72,12 +72,31 @@ Output: `NCCN-<identifier>-<date>.pdf` in the current directory.
 
 See `assets/nccn_dict.txt` for the full list of 87 guideline identifiers.
 
+## Directory Convention
+
+All paths below use these variables:
+
+- `CANCER` — kebab-case cancer name (e.g., `b-cell-lymphomas`, `breast-cancer`)
+- `TMP=tmp/${CANCER}` — intermediate pipeline artifacts (gitignored)
+- `OUT=nccn-cancer-skill/${CANCER}` — final skill package (committed)
+
+```
+nccn-skill/
+├── tmp/<CANCER>/              # Intermediate (gitignored)
+│   ├── toc.json
+│   ├── chunks/
+│   ├── converted/
+│   └── merged/
+└── nccn-cancer-skill/<CANCER>/ # Final output (committed)
+    ├── SKILL.md
+    └── references/
+```
+
 ## Step 1: Extract PDF Structure
 
-Run the TOC extraction script:
-
 ```bash
-python scripts/extract_toc.py <input.pdf> --output toc.json
+mkdir -p tmp/${CANCER}
+python scripts/extract_toc.py <input.pdf> --output tmp/${CANCER}/toc.json
 ```
 
 This produces `toc.json` containing:
@@ -92,18 +111,20 @@ This produces `toc.json` containing:
 
 ## Step 2: Chunk PDF by Disease/Section
 
-Run the chunking script:
-
 ```bash
-python scripts/chunk_pdf.py <input.pdf> --toc toc.json --output-dir chunks/
+python scripts/chunk_pdf.py <input.pdf> \
+  --toc tmp/${CANCER}/toc.json \
+  --output-dir tmp/${CANCER}/chunks \
+  --max-chars 50000
 ```
 
 This extracts text for each chunk with `[PAGE XX]` markers for citation tracing.
+Chunks exceeding `--max-chars` are automatically split by page boundaries.
 
 See [references/chunking-strategy.md](references/chunking-strategy.md) for the semantic
 boundary rules.
 
-**Verify**: Spot-check 2-3 chunk files in `chunks/`. Ensure:
+**Verify**: Spot-check 2-3 chunk files in `tmp/${CANCER}/chunks/`. Ensure:
 - YAML header has correct metadata
 - `[PAGE XX]` markers are present
 - Text content is readable (not garbled)
@@ -121,7 +142,7 @@ prompt templates.
 
 ### Quick Summary
 
-1. For each chunk file in `chunks/`:
+1. For each chunk file in `tmp/${CANCER}/chunks/`:
    - Read the chunk's YAML header to determine type (algorithm or manuscript)
    - Select the appropriate prompt template
    - Fill in placeholders: `{{disease_name}}`, `{{guideline_version}}`, `{{page_range}}`
@@ -135,7 +156,7 @@ prompt templates.
      prompt: <filled template + chunk text>
    )
    ```
-   Each agent reads the chunk and writes output to `converted/{output_file}`.
+   Each agent writes output to `tmp/${CANCER}/converted/{output_file}`.
 
 3. Wait for all agents to complete, then verify each output file exists.
 
@@ -147,19 +168,28 @@ prompt templates.
 
 5. Retry failed chunks (up to 2 retries).
 
-**Verify**: Check that `converted/` has one `.md` file per chunk in `toc.json`.
+6. Merge multi-part files:
+   ```bash
+   python scripts/merge_parts.py \
+     --input-dir tmp/${CANCER}/converted \
+     --output-dir tmp/${CANCER}/merged
+   ```
+
+**Verify**: Check that `tmp/${CANCER}/merged/` has one `.md` file per original chunk.
 
 ## Step 4: Assemble Output Skill Package
 
-Run the assembly script:
-
 ```bash
 python scripts/assemble_skill.py \
-  --chunks-dir converted/ \
-  --toc toc.json \
-  --output-dir <skill-name>/ \
-  --template assets/skill-md-template.yaml
+  --chunks-dir tmp/${CANCER}/merged \
+  --toc tmp/${CANCER}/toc.json \
+  --output-dir nccn-cancer-skill/${CANCER} \
+  --template assets/skill-md-template.yaml \
+  --guideline-name "<Guideline Name>" \
+  --version "<version>"
 ```
+
+Optionally add `--categories <categories.json>` for cancer-specific grouping.
 
 See [references/output-skill-template.md](references/output-skill-template.md) for the
 output structure.
@@ -173,16 +203,15 @@ This:
 **Verify**: Open the generated `SKILL.md` and confirm:
 - All disease subtypes are listed
 - Links point to actual files in `references/`
-- Categories (Indolent, Aggressive, Special Populations) are correct
 
 ## Step 5: Validate
 
 Run all three validators:
 
 ```bash
-python scripts/validate_links.py <skill-name>/
-python scripts/validate_citations.py <skill-name>/
-python scripts/check_format.py <skill-name>/
+python scripts/validate_links.py nccn-cancer-skill/${CANCER}/
+python scripts/validate_citations.py nccn-cancer-skill/${CANCER}/
+python scripts/check_format.py nccn-cancer-skill/${CANCER}/
 ```
 
 See [references/validation-pipeline.md](references/validation-pipeline.md) for details
@@ -226,9 +255,9 @@ Manual review checklist:
 Install the generated skill package in a Claude Code project:
 
 ```bash
-cp -r <skill-name>/ ~/.claude/skills/<skill-name>/
-# or
-cp -r <skill-name>/ .claude/skills/<skill-name>/
+cp -r nccn-cancer-skill/${CANCER}/ ~/.claude/skills/nccn-${CANCER}/
+# or project-level:
+cp -r nccn-cancer-skill/${CANCER}/ .claude/skills/nccn-${CANCER}/
 ```
 
 Then test progressive disclosure:
