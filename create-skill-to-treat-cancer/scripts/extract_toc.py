@@ -202,15 +202,39 @@ def classify_chunk(title: str, section: str, level: int) -> str:
     return "unknown"
 
 
-def build_chunks(entries: list[dict], algorithm_disease_slugs: dict[str, str]) -> list[dict]:
+def build_chunks(
+    entries: list[dict],
+    algorithm_disease_slugs: dict[str, str],
+    has_manuscript: bool = True,
+) -> list[dict]:
     chunks = []
     seen_ids = set()
+
+    # Determine which L1 entries have L2 children
+    l1_with_children = set()
+    for entry in entries:
+        if entry["section"] == "algorithm" and entry["level"] == 2:
+            # Find parent L1
+            for other in entries:
+                if (other["section"] == "algorithm" and other["level"] == 1
+                        and other["page_start"] <= entry["page_start"]
+                        and other.get("page_end", 9999) >= entry["page_start"]):
+                    l1_with_children.add(other["title"])
 
     for entry in entries:
         if entry["title"] in SKIP_TITLES:
             continue
-        if entry["section"] == "algorithm" and entry["level"] != 1:
-            continue
+        if entry["section"] == "algorithm":
+            if has_manuscript:
+                # With manuscript: only L1 algorithm entries
+                if entry["level"] != 1:
+                    continue
+            else:
+                # No manuscript: use L2 for L1s that have children, keep childless L1s
+                if entry["level"] == 1 and entry["title"] in l1_with_children:
+                    continue  # Skip L1 parent; its L2 children become the chunks
+                if entry["level"] > 2:
+                    continue  # Skip L3+
         if entry["section"] == "manuscript" and entry["level"] > 2:
             continue
 
@@ -292,7 +316,8 @@ def extract_toc(pdf_path: str, output_path: str | None = None) -> dict:
         if e["section"] == "algorithm" and e["level"] == 1 and e["title"] not in SKIP_TITLES:
             algo_disease_slugs[clean_title(e["title"]).lower()] = e["slug"]
 
-    chunks = build_chunks(entries, algo_disease_slugs)
+    has_manuscript = manuscript_idx is not None
+    chunks = build_chunks(entries, algo_disease_slugs, has_manuscript=has_manuscript)
     chunks = match_manuscript_to_algorithm(chunks)
 
     result = {
