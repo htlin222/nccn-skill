@@ -23,11 +23,16 @@ NCCN guideline PDFs are 300+ page documents covering cancer diagnosis, staging, 
 PDF (357 pages) → TOC extraction → Semantic chunking → Parallel Haiku conversion → Merge → Validate → Skill Package
 ```
 
-**Output example** (B-Cell Lymphomas v3.2025):
-- 34 reference files covering 15+ disease subtypes
-- 8,592 lines of structured clinical content
-- 3,479 page citations (`[p.XX]`) traceable to the source PDF
-- Progressive disclosure: SKILL.md (147 lines) → disease algorithm → evidence summary
+**5 generated skill packages** (1,382 PDF pages processed):
+
+| Cancer | Version | Files | Lines | Citations |
+|---|---|---|---|---|
+| B-Cell Lymphomas | v3.2025 | 34 | 8,592 | 3,479 |
+| Breast Cancer | v2.2026 | 24 | 4,008 | 1,866 |
+| Non-Small Cell Lung Cancer | v3.2026 | 36 | 5,691 | 2,796 |
+| Acute Myeloid Leukemia | v3.2026 | 34 | 5,566 | 1,668 |
+| Colon Cancer | v2.2026 | 33 | 8,765 | 2,065 |
+| **Total** | | **161** | **32,622** | **11,874** |
 
 ## Architecture
 
@@ -47,8 +52,11 @@ create-skill-to-treat-cancer/     # The meta-skill (cancer-agnostic)
 └── assets/                       # Templates and example category files
 
 nccn-cancer-skill/                # Generated skill packages (committed)
-├── b-cell-lymphomas/             # 34 reference files, 8,592 lines, 3,479 citations
-└── breast-cancer/                # 24 reference files, 4,008 lines, 1,866 citations
+├── b-cell-lymphomas/             # 34 files — FL, MCL, DLBCL, Burkitt, MZL, HGBL, APL...
+├── breast-cancer/                # 24 files — DCIS, invasive, TNBC, HER2+, HR+, pregnancy...
+├── nscl/                         # 36 files — EGFR, ALK, ROS1, PD-L1, staging, surgery...
+├── aml/                          # 34 files — APL, AML induction/consolidation, BPDCN...
+└── colon/                        # 33 files — staging, adjuvant, metastatic, MSI, KRAS...
 
 tmp/                              # Intermediate pipeline artifacts (gitignored)
 └── <cancer-name>/                # toc.json, chunks/, converted/, merged/
