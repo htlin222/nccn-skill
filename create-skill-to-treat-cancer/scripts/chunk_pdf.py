@@ -44,7 +44,7 @@ def build_header(chunk: dict, source_pdf: str, part: int | None = None, total_pa
         "---",
         f"chunk_id: {chunk_id}",
         f"title: {chunk['title']}",
-        f"section: {chunk['section']}",
+        f"type: {chunk['type']}",
         f"type: {chunk['type']}",
         f"source_pdf: {source_pdf}",
         f"page_range: {page_range}",
