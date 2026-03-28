@@ -1,5 +1,10 @@
 # create-skill-to-treat-cancer
 
+[![GitHub stars](https://img.shields.io/github/stars/htlin222/nccn-skill?style=flat-square)](https://github.com/htlin222/nccn-skill/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/htlin222/nccn-skill?style=flat-square)](https://github.com/htlin222/nccn-skill/commits/main)
+[![Python](https://img.shields.io/badge/python-3.10+-blue?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue?style=flat-square)](LICENSE)
+
 A meta-skill that converts NCCN Clinical Practice Guideline PDFs into structured AI skill packages following the [Vercel Skills protocol](https://github.com/vercel-labs/skills).
 
 **English** | [繁體中文](README.zh-TW.md)
